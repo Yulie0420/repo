@@ -4,39 +4,11 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 
 import '@fullcalendar/daygrid/main.css'
 import '@fullcalendar/list/main.css'
+let url = 'http://127.0.0.1:8000'
 
-const events = [
+const initEvents = [
     { title: 'All Day Event', start: getDate('YEAR-MONTH-01') },
-    {
-        title: 'Long Event',
-        start: getDate('YEAR-MONTH-07'),
-        end: getDate('YEAR-MONTH-10'),
-    },
-    {
-        groupId: '999',
-        title: 'Repeating Event',
-        start: getDate('YEAR-MONTH-09T16:00:00+00:00'),
-    },
-    {
-        groupId: '999',
-        title: 'Repeating Event',
-        start: getDate('YEAR-MONTH-16T16:00:00+00:00'),
-    },
-    {
-        title: 'Conference',
-        start: 'YEAR-MONTH-17',
-        end: getDate('YEAR-MONTH-19'),
-    },
-    {
-        title: 'Meeting',
-        start: getDate('YEAR-MONTH-18T10:30:00+00:00'),
-        end: getDate('YEAR-MONTH-18T12:30:00+00:00'),
-    },
-    { title: 'Lunch', start: getDate('YEAR-MONTH-18T12:00:00+00:00') },
-    { title: 'Birthday Party', start: getDate('YEAR-MONTH-19T07:00:00+00:00') },
-    { title: 'Meeting', start: getDate('YEAR-MONTH-18T14:30:00+00:00') },
-    { title: 'Happy Hour', start: getDate('YEAR-MONTH-18T17:30:00+00:00') },
-    { title: 'Dinner', start: getDate('YEAR-MONTH-18T20:00:00+00:00') },
+    
 ]
 
 function getDate(dayString) {
@@ -52,6 +24,21 @@ function getDate(dayString) {
 }
 
 const PersonalCalendar = () => {
+const [events, setEvents] = useState(initEvents)
+// initEvents 為上面原本的 events
+    useEffect(() => {getData()}, [])
+    function getData() {
+        fetch(url, {
+        method: 'GET',
+        redirect: 'follow',
+     })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result)
+            setEvents(result)
+        })
+        .catch((error) => console.log('error', error))
+        }
     return (
         <div className='calendarContainer'>
             <FullCalendar
